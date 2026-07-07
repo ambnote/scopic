@@ -22,6 +22,21 @@ create table if not exists profiles (
 create index if not exists idx_profiles_role on profiles(role);
 
 ------------------------------------------------------------
+-- beta_signups
+------------------------------------------------------------
+create table if not exists beta_signups (
+  id uuid primary key default gen_random_uuid(),
+  full_name text not null,
+  company text not null,
+  email text not null,
+  referral_source text,
+  user_agent text,
+  created_at timestamptz default now()
+);
+
+create index if not exists idx_beta_signups_email on beta_signups(email);
+create index if not exists idx_beta_signups_created_at on beta_signups(created_at desc);
+------------------------------------------------------------
 -- conversations
 ------------------------------------------------------------
 create table if not exists conversations (

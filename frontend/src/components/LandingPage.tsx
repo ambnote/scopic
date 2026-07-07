@@ -246,7 +246,7 @@ export default function LandingPage() {
     });
 
     if (insertError) {
-      console.error("Beta signup failed:", insertError.message);
+      console.error("Beta signup failed:", insertError);
       setError("Something went wrong saving your details. Please try again.");
       setSubmitting(false);
       return;
