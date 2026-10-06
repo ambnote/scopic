@@ -2,7 +2,21 @@
 
 import Image from "next/image";
 import { useRef, useState } from "react";
-import { ArrowRight, CheckCircle2, Cpu, Database, FileText, LockKeyhole, Scale, ShieldCheck, Sparkles, TriangleAlert } from "lucide-react";
+import {
+  ArrowRight,
+  BrainCircuit,
+  CheckCircle2,
+  Cpu,
+  Database,
+  FileText,
+  LockKeyhole,
+  Network,
+  Scale,
+  ShieldCheck,
+  Sparkles,
+  TriangleAlert,
+  Zap,
+} from "lucide-react";
 import { supabaseBrowserClient } from "@/lib/supabase/client";
 
 const CALENDAR_URL = "https://calendar.app.google/z4aYNYvn748Br3ap8";
@@ -38,6 +52,22 @@ const WORKFLOW_STEPS = [
   "Route tasks to legal agents",
   "Capture lawyer corrections",
   "Reuse the learning on the next matter",
+] as const;
+
+const SYSTEM_SIGNALS = [
+  { label: "Local model", value: "running", tone: "text-[#8fd8aa]" },
+  { label: "Privilege boundary", value: "sealed", tone: "text-[#f7f3ea]" },
+  { label: "Matter graph", value: "42 docs", tone: "text-[#e8b13a]" },
+  { label: "Outside transfer", value: "0 bytes", tone: "text-[#8fd8aa]" },
+] as const;
+
+const MARQUEE_ITEMS = [
+  "Indemnity cap reviewed",
+  "Fallback clause matched",
+  "Counterparty precedent found",
+  "Partner preference applied",
+  "Risk memo drafted",
+  "Matter memory updated",
 ] as const;
 
 const LAW_FIRM_LOGOS = [
@@ -117,9 +147,99 @@ function ApplyLink() {
   );
 }
 
+function HeroBackdrop() {
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+      <div className="scopic-grid absolute inset-0 opacity-55" />
+      <div className="scopic-sweep absolute -left-1/4 top-0 h-full w-1/2" />
+      <div className="absolute right-[-10%] top-[-24%] size-[540px] rounded-full border border-[#e8b13a]/10 sm:size-[720px]" />
+      <div className="absolute right-[4%] top-[16%] hidden size-[420px] rounded-full border border-[#8fd8aa]/10 lg:block" />
+      <ScopicMark className="scopic-hero-mark absolute right-[3%] top-[8%] hidden h-[760px] w-[414px] text-[#f7f3ea]/[0.035] lg:block" />
+    </div>
+  );
+}
+
+function SignalRail() {
+  return (
+    <div className="grid min-w-0 gap-2 sm:grid-cols-2">
+      {SYSTEM_SIGNALS.map((signal, index) => (
+        <div
+          key={signal.label}
+          className="scopic-signal flex min-w-0 flex-wrap items-center justify-between gap-3 border border-[#f7f3ea]/12 bg-[#f7f3ea]/[0.035] px-3 py-2 font-mono text-[10px] uppercase text-[#f7f3ea]/52"
+          style={{ animationDelay: `${index * 110}ms` }}
+        >
+          <span>{signal.label}</span>
+          <span className={signal.tone}>{signal.value}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function Marquee() {
+  const items = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS];
+
+  return (
+    <div className="scopic-marquee mt-8 min-w-0 max-w-full overflow-hidden border-y border-[#f7f3ea]/12 py-3 font-mono text-[10px] uppercase text-[#f7f3ea]/50">
+      <div className="scopic-marquee-track flex w-max gap-8">
+        {items.map((item, index) => (
+          <span key={`${item}-${index}`} className="inline-flex items-center gap-3">
+            <span className="size-1.5 bg-[#e8b13a]" aria-hidden />
+            {item}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function StartSessionCard({ onStart }: { onStart: () => void }) {
+  return (
+    <div className="scopic-session-card relative min-w-0 max-w-full overflow-hidden border border-[#f7f3ea]/15 bg-[#090b08]/90 p-4 shadow-2xl shadow-black/40">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#e8b13a] to-transparent" aria-hidden />
+      <div className="relative grid gap-4">
+        <div className="flex items-start justify-between gap-5">
+          <div>
+            <p className="font-mono text-[10px] uppercase text-[#f7f3ea]/42">Session boot</p>
+            <h2 className="mt-2 font-display text-2xl font-bold tracking-normal">Start private legal reasoning</h2>
+          </div>
+          <div className="relative flex size-12 items-center justify-center border border-[#8fd8aa]/25 bg-[#8fd8aa]/10 text-[#8fd8aa]">
+            <ShieldCheck className="size-5" aria-hidden />
+            <span className="scopic-ping absolute inset-0 border border-[#8fd8aa]/40" aria-hidden />
+          </div>
+        </div>
+
+        <div className="grid gap-2 text-sm text-[#f7f3ea]/68">
+          <div className="flex items-center justify-between border border-[#f7f3ea]/10 bg-[#f7f3ea]/[0.025] px-3 py-2">
+            <span>Confidential docs</span>
+            <span className="font-mono text-[11px] text-[#8fd8aa]">local</span>
+          </div>
+          <div className="flex items-center justify-between border border-[#f7f3ea]/10 bg-[#f7f3ea]/[0.025] px-3 py-2">
+            <span>Model route</span>
+            <span className="font-mono text-[11px] text-[#e8b13a]">lawyer-controlled</span>
+          </div>
+          <div className="flex items-center justify-between border border-[#f7f3ea]/10 bg-[#f7f3ea]/[0.025] px-3 py-2">
+            <span>Matter memory</span>
+            <span className="font-mono text-[11px] text-[#f7f3ea]">ready</span>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={onStart}
+          className="group inline-flex w-full items-center justify-center gap-3 border border-[#e8b13a] bg-[#e8b13a] px-5 py-3 font-mono text-[11px] uppercase text-[#12110f] transition hover:bg-[#f7f3ea]"
+        >
+          Start a private session
+          <ArrowRight className="size-4 transition group-hover:translate-x-1" aria-hidden />
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function ConsolePreview() {
   return (
-    <div className="relative overflow-hidden border border-[#f7f3ea]/15 bg-[#0b0d0a] p-3 shadow-2xl shadow-black/35 sm:p-4">
+    <div className="scopic-console relative min-w-0 max-w-full overflow-hidden border border-[#f7f3ea]/15 bg-[#0b0d0a] p-3 shadow-2xl shadow-black/35 sm:p-4">
       <Image
         src="/logos/scopic-logo-white-vertical.png"
         alt=""
@@ -128,7 +248,8 @@ function ConsolePreview() {
         priority
         className="pointer-events-none absolute -right-12 top-4 hidden h-[430px] w-auto opacity-[0.06] lg:block"
       />
-      <div className="relative border border-[#f7f3ea]/10 bg-[#070806]">
+      <div className="relative min-w-0 border border-[#f7f3ea]/10 bg-[#070806]">
+        <div className="scopic-scanline" aria-hidden />
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#f7f3ea]/10 px-4 py-3 font-mono text-[11px] text-[#f7f3ea]/55">
           <span>scopic.local / matter-workspace</span>
           <span className="inline-flex items-center gap-2 text-[#8fd8aa]">
@@ -166,15 +287,15 @@ function ConsolePreview() {
             </div>
 
             <div className="mt-4 space-y-3 text-sm leading-relaxed">
-              <div className="border border-[#f35f5f]/20 bg-[#f35f5f]/[0.06] p-3 text-[#f7f3ea]/78">
+              <div className="scopic-line-card border border-[#f35f5f]/20 bg-[#f35f5f]/[0.06] p-3 text-[#f7f3ea]/78">
                 <p className="font-mono text-[10px] uppercase text-[#ff9b9b]">Risk read</p>
                 <p className="mt-2">Section 7 (Indemnity) redline flagged as high risk and inconsistent with any relevant Fallback Provisions.</p>
               </div>
-              <div className="border-l-2 border-[#e8b13a] bg-[#e8b13a]/[0.06] p-3 text-[#f7f3ea]">
+              <div className="scopic-line-card border-l-2 border-[#e8b13a] bg-[#e8b13a]/[0.06] p-3 text-[#f7f3ea]">
                 <p className="font-mono text-[10px] uppercase text-[#e8b13a]">Suggested revision</p>
                 <p className="mt-2">Suggested revision should track escrow release mechanics, not headline purchase price.</p>
               </div>
-              <div className="border border-[#8fd8aa]/20 bg-[#8fd8aa]/[0.06] p-3 text-[#f7f3ea]/70">
+              <div className="scopic-line-card border border-[#8fd8aa]/20 bg-[#8fd8aa]/[0.06] p-3 text-[#f7f3ea]/70">
                 <p className="font-mono text-[10px] uppercase text-[#8fd8aa]">Human lawyer feedback</p>
                 <p className="mt-2">Push back with Fallback Provision #302, because counterparty&apos;s affiliate accepted this language in a prior negotiation.</p>
               </div>
@@ -188,7 +309,7 @@ function ConsolePreview() {
             </div>
             <ol className="mt-4 space-y-3 text-sm text-[#f7f3ea]/70">
               {WORKFLOW_STEPS.map((step, index) => (
-                <li key={step} className="grid grid-cols-[auto_1fr] gap-3">
+                <li key={step} className="scopic-ledger-row grid grid-cols-[auto_1fr] gap-3" style={{ animationDelay: `${index * 150}ms` }}>
                   <span className="flex size-6 items-center justify-center border border-[#f7f3ea]/15 font-mono text-[10px] text-[#e8b13a]">0{index + 1}</span>
                   <span className="border-b border-[#f7f3ea]/10 pb-3 last:border-b-0 last:pb-0">{step}</span>
                 </li>
@@ -200,6 +321,7 @@ function ConsolePreview() {
     </div>
   );
 }
+
 export default function LandingPage() {
   const betaRef = useRef<HTMLElement>(null);
   const [fullName, setFullName] = useState("");
@@ -256,11 +378,11 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#060705] text-[#f7f3ea]">
-      <div className="mx-auto flex min-h-screen max-w-[1180px] flex-col px-5 py-6 sm:px-8 lg:px-10">
-        <header className="flex flex-wrap items-center justify-between gap-5 border-b border-[#f7f3ea]/15 pb-5">
-          <a href="#top" className="flex items-center gap-4" aria-label="Scopic home">
-            <ScopicMark className="h-16 w-9 text-[#f7f3ea] sm:h-20 sm:w-11" />
+    <div className="scopic-landing min-h-screen overflow-x-hidden bg-[#060705] text-[#f7f3ea]">
+      <div className="mx-auto flex min-h-screen max-w-[1220px] flex-col px-5 py-6 sm:px-8 lg:px-10">
+        <header className="scopic-rise relative z-20 flex flex-wrap items-center justify-between gap-5 border-b border-[#f7f3ea]/15 pb-5">
+          <a href="#top" className="group flex items-center gap-4" aria-label="Scopic home">
+            <ScopicMark className="h-16 w-9 text-[#f7f3ea] transition duration-500 group-hover:text-[#e8b13a] sm:h-20 sm:w-11" />
             <span className="flex flex-col leading-none">
               <span className="font-display text-3xl font-bold tracking-normal sm:text-4xl">SCOPIC</span>
               <span className="mt-2 font-mono text-[11px] uppercase text-[#f7f3ea]/55">Private legal AI lab</span>
@@ -278,36 +400,29 @@ export default function LandingPage() {
           </nav>
         </header>
 
-        <main id="top">
-          <section className="grid gap-10 border-b border-[#f7f3ea]/15 py-12 lg:grid-cols-[0.92fr_1.08fr] lg:py-16">
-            <div className="flex flex-col justify-center">
-              <p className="font-mono text-xs uppercase text-[#e8b13a]">Local-first AI for lawyers</p>
-              <h1 className="mt-5 max-w-3xl font-display text-5xl font-bold leading-[0.96] tracking-normal text-balance sm:text-7xl lg:text-[82px]">
-                Your matters. Your models. Your legal AI.
-              </h1>
-              <p className="mt-7 max-w-2xl text-lg leading-8 text-[#f7f3ea]/72 sm:text-xl">
-                Scopic gives lawyers an AI workspace to privately codify legal judgment. Run sensitive work locally and use frontier models deliberately. Turn lawyer feedback into firm advantage to automate workflows, train teams, or power a digital twin.
-              </p>
-              <div className="mt-9 flex flex-wrap items-center gap-4">
-                <button
-                  type="button"
-                  onClick={scrollToBeta}
-                  className="inline-flex items-center gap-3 border border-[#e8b13a] bg-[#e8b13a] px-5 py-3 font-mono text-[11px] uppercase text-[#12110f] transition hover:bg-[#f7f3ea]"
-                >
-                  Join our lawyer beta
-                  <ArrowRight className="size-4" aria-hidden />
-                </button>
-                <a
-                  href={CALENDAR_URL}
-                  {...externalLinkProps()}
-                  className="inline-flex items-center gap-3 border border-[#f7f3ea]/20 px-5 py-3 font-mono text-[11px] uppercase text-[#f7f3ea]/72 transition hover:border-[#f7f3ea] hover:text-[#f7f3ea]"
-                >
-                  Book a call
-                  <ArrowRight className="size-4" aria-hidden />
-                </a>
+        <main id="top" className="relative z-10">
+          <section className="relative grid min-h-[calc(100vh-128px)] min-w-0 items-center gap-10 border-b border-[#f7f3ea]/15 py-12 lg:grid-cols-[0.92fr_1.08fr] lg:py-16">
+            <HeroBackdrop />
+            <div className="scopic-rise relative z-10 flex min-w-0 flex-col justify-center">
+              <div className="mb-6 inline-flex w-fit items-center gap-3 border border-[#8fd8aa]/25 bg-[#8fd8aa]/10 px-3 py-2 font-mono text-[10px] uppercase text-[#8fd8aa]">
+                <span className="scopic-live-dot size-2 bg-[#8fd8aa]" aria-hidden />
+                Local-first AI for high-stakes legal work
               </div>
+              <h1 className="max-w-full font-display text-5xl font-bold leading-[0.92] tracking-normal text-balance sm:text-7xl lg:text-[88px]">
+                Legal AI that thinks inside your firm.
+              </h1>
+              <p className="mt-7 max-w-2xl text-lg leading-8 text-[#f7f3ea]/74 sm:text-xl">
+                Scopic turns matter documents, lawyer feedback, and firm playbooks into a private AI workspace. Start locally, route deliberately, and build legal intelligence your team actually owns.
+              </p>
+              <div className="mt-9 grid min-w-0 max-w-full gap-4 lg:max-w-2xl lg:grid-cols-[1fr_0.86fr]">
+                <StartSessionCard onStart={scrollToBeta} />
+                <SignalRail />
+              </div>
+              <Marquee />
             </div>
-            <ConsolePreview />
+            <div className="scopic-rise relative z-10 min-w-0" style={{ animationDelay: "120ms" }}>
+              <ConsolePreview />
+            </div>
           </section>
 
           <section id="thinking" className="grid gap-10 border-b border-[#f7f3ea]/15 py-12 lg:grid-cols-[0.8fr_1.2fr] lg:py-16">
@@ -322,28 +437,28 @@ export default function LandingPage() {
                 The most valuable legal knowledge does not live on the public internet. It sits inside matters, markups, judgment calls, partner preferences, and review history. Scopic is built around that reality: private workspace first, model choice second, lawyer control always.
               </p>
               <div className="grid gap-3 sm:grid-cols-2">
-                <div className="flex items-start gap-3 border border-[#f7f3ea]/12 p-4">
+                <div className="group flex items-start gap-3 border border-[#f7f3ea]/12 p-4 transition hover:border-[#e8b13a]/35 hover:bg-[#e8b13a]/[0.035]">
                   <LockKeyhole className="mt-1 size-5 text-[#e8b13a]" aria-hidden />
                   <div>
                     <p className="font-semibold">Data control</p>
                     <p className="mt-1 text-sm leading-6 text-[#f7f3ea]/58">Keep confidential work on the machine when it matters.</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3 border border-[#f7f3ea]/12 p-4">
+                <div className="group flex items-start gap-3 border border-[#f7f3ea]/12 p-4 transition hover:border-[#e8b13a]/35 hover:bg-[#e8b13a]/[0.035]">
                   <Cpu className="mt-1 size-5 text-[#e8b13a]" aria-hidden />
                   <div>
                     <p className="font-semibold">Model choice</p>
                     <p className="mt-1 text-sm leading-6 text-[#f7f3ea]/58">Move between local and cloud reasoning by task sensitivity.</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3 border border-[#f7f3ea]/12 p-4">
+                <div className="group flex items-start gap-3 border border-[#f7f3ea]/12 p-4 transition hover:border-[#e8b13a]/35 hover:bg-[#e8b13a]/[0.035]">
                   <Database className="mt-1 size-5 text-[#e8b13a]" aria-hidden />
                   <div>
                     <p className="font-semibold">Reusable context</p>
                     <p className="mt-1 text-sm leading-6 text-[#f7f3ea]/58">Turn feedback into a better matter memory layer.</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3 border border-[#f7f3ea]/12 p-4">
+                <div className="group flex items-start gap-3 border border-[#f7f3ea]/12 p-4 transition hover:border-[#e8b13a]/35 hover:bg-[#e8b13a]/[0.035]">
                   <Scale className="mt-1 size-5 text-[#e8b13a]" aria-hidden />
                   <div>
                     <p className="font-semibold">Lawyer oversight</p>
@@ -355,9 +470,19 @@ export default function LandingPage() {
           </section>
 
           <section id="system" className="border-b border-[#f7f3ea]/15 py-12 lg:py-16">
+            <div className="mb-8 flex flex-wrap items-end justify-between gap-5">
+              <div>
+                <p className="font-mono text-xs uppercase text-[#f7f3ea]/45">Built for the session before the session</p>
+                <h2 className="mt-3 font-display text-4xl font-bold tracking-normal sm:text-5xl">The workspace warms up around the matter.</h2>
+              </div>
+              <div className="flex items-center gap-3 border border-[#f7f3ea]/12 px-4 py-3 font-mono text-[10px] uppercase text-[#f7f3ea]/55">
+                <BrainCircuit className="size-4 text-[#8fd8aa]" aria-hidden />
+                Firm context active
+              </div>
+            </div>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {ADVANTAGES.map((advantage) => (
-                <article key={advantage.title} className="border border-[#f7f3ea]/12 p-5">
+                <article key={advantage.title} className="group border border-[#f7f3ea]/12 p-5 transition hover:-translate-y-1 hover:border-[#e8b13a]/35 hover:bg-[#f7f3ea]/[0.025]">
                   <CheckCircle2 className="size-5 text-[#e8b13a]" aria-hidden />
                   <h3 className="mt-5 font-display text-2xl font-bold tracking-normal">{advantage.title}</h3>
                   <p className="mt-3 text-sm leading-6 text-[#f7f3ea]/62">{advantage.copy}</p>

@@ -134,3 +134,182 @@ body {
     text-wrap: balance;
   }
 }
+
+@layer components {
+  .scopic-landing {
+    background:
+      radial-gradient(circle at 78% 8%, rgba(232, 177, 58, 0.12), transparent 30%),
+      radial-gradient(circle at 8% 32%, rgba(143, 216, 170, 0.08), transparent 28%),
+      #060705;
+  }
+
+  .scopic-grid {
+    background-image:
+      linear-gradient(rgba(247, 243, 234, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(247, 243, 234, 0.045) 1px, transparent 1px);
+    background-size: 52px 52px;
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), transparent 86%);
+    animation: scopic-grid-drift 22s linear infinite;
+  }
+
+  .scopic-sweep {
+    background: linear-gradient(100deg, transparent 20%, rgba(232, 177, 58, 0.13) 48%, transparent 72%);
+    filter: blur(18px);
+    transform: translateX(-45%) skewX(-10deg);
+    animation: scopic-sweep 6.5s ease-in-out infinite;
+  }
+
+  .scopic-hero-mark {
+    transform-origin: 50% 50%;
+    animation: scopic-mark-breathe 8s ease-in-out infinite;
+  }
+
+  .scopic-rise {
+    animation: scopic-rise 700ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  .scopic-live-dot {
+    box-shadow: 0 0 0 0 rgba(143, 216, 170, 0.75);
+    animation: scopic-live 1.8s ease-out infinite;
+  }
+
+  .scopic-ping {
+    animation: scopic-ping 1.9s ease-out infinite;
+  }
+
+  .scopic-session-card::before,
+  .scopic-console::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(135deg, rgba(232, 177, 58, 0.13), transparent 26%, transparent 72%, rgba(143, 216, 170, 0.1));
+    opacity: 0.75;
+  }
+
+  .scopic-session-card {
+    animation: scopic-float 7s ease-in-out infinite;
+  }
+
+  .scopic-console {
+    animation: scopic-float 7s ease-in-out infinite reverse;
+  }
+
+  .scopic-scanline {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .scopic-scanline::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: -24%;
+    height: 22%;
+    background: linear-gradient(to bottom, transparent, rgba(143, 216, 170, 0.12), transparent);
+    animation: scopic-scan 5.8s linear infinite;
+  }
+
+  .scopic-signal {
+    animation: scopic-rise 580ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  .scopic-line-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scopic-line-card::after {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    left: -40%;
+    width: 35%;
+    background: linear-gradient(90deg, transparent, rgba(247, 243, 234, 0.12), transparent);
+    animation: scopic-thread 4.8s ease-in-out infinite;
+  }
+
+  .scopic-ledger-row {
+    animation: scopic-rise 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  .scopic-marquee {
+    mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+  }
+
+  .scopic-marquee-track {
+    animation: scopic-marquee 26s linear infinite;
+  }
+}
+
+@keyframes scopic-grid-drift {
+  from { background-position: 0 0, 0 0; }
+  to { background-position: 52px 52px, 52px 52px; }
+}
+
+@keyframes scopic-sweep {
+  0%, 100% { opacity: 0; transform: translateX(-65%) skewX(-10deg); }
+  45%, 58% { opacity: 1; transform: translateX(220%) skewX(-10deg); }
+}
+
+@keyframes scopic-mark-breathe {
+  0%, 100% { opacity: 0.035; transform: scale(1); }
+  50% { opacity: 0.07; transform: scale(1.035); }
+}
+
+@keyframes scopic-rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scopic-live {
+  0% { box-shadow: 0 0 0 0 rgba(143, 216, 170, 0.75); }
+  70% { box-shadow: 0 0 0 8px rgba(143, 216, 170, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(143, 216, 170, 0); }
+}
+
+@keyframes scopic-ping {
+  0% { opacity: 0.9; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.55); }
+}
+
+@keyframes scopic-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes scopic-scan {
+  from { transform: translateY(0); }
+  to { transform: translateY(560%); }
+}
+
+@keyframes scopic-thread {
+  0%, 35% { transform: translateX(0); opacity: 0; }
+  50% { opacity: 1; }
+  75%, 100% { transform: translateX(420%); opacity: 0; }
+}
+
+@keyframes scopic-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scopic-grid,
+  .scopic-sweep,
+  .scopic-hero-mark,
+  .scopic-rise,
+  .scopic-live-dot,
+  .scopic-ping,
+  .scopic-session-card,
+  .scopic-console,
+  .scopic-scanline::after,
+  .scopic-signal,
+  .scopic-line-card::after,
+  .scopic-ledger-row,
+  .scopic-marquee-track {
+    animation: none !important;
+  }
+}
