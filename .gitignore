@@ -7,6 +7,7 @@ Thumbs.db
 *.swo
 .idea/
 .vscode/
+.cursor/
 
 # Python / backend artifacts
 backend/.venv/
