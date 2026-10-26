@@ -291,10 +291,6 @@ function ConsolePreview() {
                 <p className="font-mono text-[10px] uppercase text-[#ff9b9b]">Risk read</p>
                 <p className="mt-2">Section 7 (Indemnity) redline flagged as high risk and inconsistent with any relevant Fallback Provisions.</p>
               </div>
-              <div className="scopic-line-card border-l-2 border-[#e8b13a] bg-[#e8b13a]/[0.06] p-3 text-[#f7f3ea]">
-                <p className="font-mono text-[10px] uppercase text-[#e8b13a]">Suggested revision</p>
-                <p className="mt-2">Suggested revision should track escrow release mechanics, not headline purchase price.</p>
-              </div>
               <div className="scopic-line-card border border-[#8fd8aa]/20 bg-[#8fd8aa]/[0.06] p-3 text-[#f7f3ea]/70">
                 <p className="font-mono text-[10px] uppercase text-[#8fd8aa]">Human lawyer feedback</p>
                 <p className="mt-2">Push back with Fallback Provision #302, because counterparty&apos;s affiliate accepted this language in a prior negotiation.</p>
